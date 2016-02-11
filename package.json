@@ -1,15 +1,21 @@
 {
-  "name": "droopy-ngrok",
-  "version": "1.0.1",
-  "description": "Launches ngrok (v2), then outputs a clickable hyperlink and a qrcode.",
+  "name": "droopy-server",
+  "version": "1.0.2",
+  "description": "Launches ngrok (v2), and optionally spins up a live-server instance.",
   "main": "index.js",
+  "bin": {
+    "droopy-server": "./shellCommand.js"
+  },
   "scripts": {
     "start": "node ./index.js"
   },
   "author": "Andrew Petersen",
   "license": "ISC",
   "dependencies": {
+    "commander": "^2.9.0",
+    "live-server": "^0.9.1",
     "ngrok": "^0.2.2",
+    "open": "0.0.5",
     "qrcode-terminal": "^0.10.0",
     "request-promise": "^2.0.0"
   }
