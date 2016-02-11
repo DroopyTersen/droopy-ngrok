@@ -1,6 +1,6 @@
 {
   "name": "droopy-ngrok",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Launches ngrok (v2), then outputs a clickable hyperlink and a qrcode.",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,8 @@
   "author": "Andrew Petersen",
   "license": "ISC",
   "dependencies": {
-    "droopy-http": "0.0.1",
-    "qrcode-terminal": "^0.10.0"
+    "ngrok": "^0.2.2",
+    "qrcode-terminal": "^0.10.0",
+    "request-promise": "^2.0.0"
   }
 }

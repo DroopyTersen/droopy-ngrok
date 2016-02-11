@@ -1,39 +1,38 @@
-var droopyCmd = require('../droopy-cmd');
-var http = new (require('droopy-http'))();
+var cmdProcess = require("./cmdProcess");
+var request = require("request-promise");
 var qrcode = require('qrcode-terminal');
+var ngrokApiUrl = "http://127.0.0.1:4040/api/tunnels";
 
-var getTunnelUrl = function() {
-    var ngrokApiUrl = "http://localhost:4040/api/tunnels";
-    return http.getJSON(ngrokApiUrl).then(
-        (data) => {
+var getTunnelUrl = function(done) {
+    setTimeout(() => {
+        console.log("Checking for NGROK url...");
+        request({ url: ngrokApiUrl, json: true }).then(data => {
             if (data.tunnels && data.tunnels.length > 1) {
-                return data.tunnels[1].public_url;
+                done(data.tunnels[1].public_url);
             } else {
-                //throw "Unable to find any active NGROK tunnels."
-                return null;
+                getTunnelUrl(done);
             }
-        }
-        ,
-        (error) => console.log(error)
-    );   
-}
-var start = function(port) {
+        }).catch(e => {
+            getTunnelUrl(done);
+        })
+    }, 1000);
+};
+
+var generateQRCode = function(url) {
+    if (url) {
+        console.log(url);
+        qrcode.generate(url, (qr) => console.log(qr));
+    } else {
+        console.log("QR Code Error: No url given");
+    }
+};
+
+var start = function(port, cb) {
     var ngrokPath = __dirname + "\\node_modules\\ngrok\\bin\\ngrok.exe";
     var ngrokArgs = ["http", port];
-    var ngrokProcess = droopyCmd.create(ngrokPath, ngrokArgs);
+    var ngrokProcess = cmdProcess.create(ngrokPath, ngrokArgs);
     
-    // Give it a bit to spin up
-    setTimeout(function() {
-        getTunnelUrl().then(url => {
-            if (url) {
-                console.log(url);
-                qrcode.generate(url, (qr) => console.log(qr));
-            } else {
-                console.log("Couldn't find ngrok tunnels");
-            }
-        });
-    }, 6000);
-    
+    getTunnelUrl(generateQRCode);
     
     return { 
         stop: () => ngrokProcess.kill() 
