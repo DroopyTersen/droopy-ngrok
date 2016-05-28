@@ -27,7 +27,14 @@ var generateQRCode = function(url) {
     }
 };
 
-var start = function(port, opts, done) {
+var defaults = {
+    server: true,
+    open: false
+};
+
+var start = function(port, opts) {
+    port = port || 3000;
+    opts = Object.assign({}, defaults, opts);
     if (opts.server) startLiveServer(port, opts);
 
     return startNgrok(port).then(url => {
