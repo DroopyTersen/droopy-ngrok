@@ -14,7 +14,7 @@
   "dependencies": {
     "commander": "^2.9.0",
     "live-server": "^0.9.1",
-    "ngrok": "^0.2.2",
+    "ngrok": "^2.1.8",
     "open": "0.0.5",
     "qrcode-terminal": "^0.10.0",
     "request-promise": "^2.0.0"
